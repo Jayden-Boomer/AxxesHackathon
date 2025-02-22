@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign In / Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .input-container {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .input-container input[type="text"],
+    .input-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      user-select: none;
+    }
+    .container button {
+      width: 100%;
+      padding: 10px;
+      background: #4285F4;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .container button:hover {
+      background: #357ae8;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <div class="input-container">
+        <input type="text" id="signupUsername" placeholder="Username" required />
+      </div>
+      <div class="input-container">
+        <input type="password" id="signupPassword" placeholder="Password" required />
+        <span class="toggle-password" data-target="signupPassword">👁</span>
+      </div>
+      <button type="submit">Sign Up</button>
+      <div id="signupError" class="error"></div>
+    </form>
+    <hr>
+    <h2>Sign In</h2>
+    <form id="signinForm">
+      <div class="input-container">
+        <input type="text" id="signinUsername" placeholder="Username" required />
+      </div>
+      <div class="input-container">
+        <input type="password" id="signinPassword" placeholder="Password" required />
+        <span class="toggle-password" data-target="signinPassword">👁</span>
+      </div>
+      <button type="submit">Sign In</button>
+      <div id="signinError" class="error"></div>
+    </form>
+  </div>
+
+  <script>
+    // Toggle password visibility for any input associated with a toggle icon
+    document.querySelectorAll('.toggle-password').forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        const targetId = toggle.getAttribute('data-target');
+        const inputField = document.getElementById(targetId);
+        if (inputField) {
+          if (inputField.type === 'password') {
+            inputField.type = 'text';
+            toggle.textContent = '🙈';
+          } else {
+            inputField.type = 'password';
+            toggle.textContent = '👁';
+          }
+        }
+      });
+    });
+
+    // Sign Up Form Handler
+    document.getElementById('signupForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const username = document.getElementById('signupUsername').value;
+      const password = document.getElementById('signupPassword').value;
+
+      if (!username || !password) {
+        document.getElementById('signupError').textContent = 'Please fill in both fields.';
+        return;
+      }
+      document.getElementById('signupError').textContent = '';
+
+      try {
+        const response = await fetch('/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+        } else {
+          document.getElementById('signupError').textContent = data.error;
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('signupError').textContent = 'An error occurred.';
+      }
+    });
+
+    // Sign In Form Handler: Set background color if credentials match.
+    document.getElementById('signinForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const username = document.getElementById('signinUsername').value;
+      const password = document.getElementById('signinPassword').value;
+
+      if (!username || !password) {
+        document.getElementById('signinError').textContent = 'Please fill in both fields.';
+        return;
+      }
+      document.getElementById('signinError').textContent = '';
+
+      try {
+        const response = await fetch('/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+          // Update the background color using the stored color
+          document.body.style.backgroundColor = data.color;
+        } else {
+          document.getElementById('signinError').textContent = data.error;
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('signinError').textContent = 'An error occurred.';
+      }
+    });
+  </script>
+
+</body>
+</html>
