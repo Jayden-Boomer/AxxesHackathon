@@ -234,9 +234,9 @@
         const data = await response.json();
         if (response.ok) {
           // Append the user's message or the server's response to the gptResponse div
-          document.getElementById('gptResponse').innerHTML += `<p>${data.message}</p>`;
+          document.getElementById('gptResponse').innerHTML = `<p>${data.message}</p>`;
         } else {
-          document.getElementById('gptResponse').innerHTML += `<p>${data.error || 'Error occurred'}</p>`;
+          document.getElementById('gptResponse').innerHTML = `<p>${data.error || 'Error occurred'}</p>`;
         }
 
       } catch (error) {
