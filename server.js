@@ -158,6 +158,23 @@ app.post('/signin', (req, res) => {
   });
 });
 
+app.post('/gpt-submit', (req, res) => {
+  const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'Please enter something into the chat' });
+  }
+
+  res.json({ message: 'Successfully submitted chat'});
+  // const filepath = path.join(__dirname, 'userData/*');
+  // fs.readFile(filepath, 'utf8', (err, data) => {
+  //   if (err) {
+  //     console.error('Error reading CSV file:', err);
+  //     return res.status(500).json({ error: 'Internal server error' });
+  //   }
+    
+  // });
+});
+
 app.post('/upload-file', async (req, res) => {
   const { fileContents, userName, category } = req.body;
   if (!fileContents || !userName || !category) {

@@ -220,11 +220,29 @@
     });
 
     // Main App Submission Handler
-    document.getElementById('chatForm').addEventListener('submit', function(event) {
+    document.getElementById('chatForm').addEventListener('submit', async function(event) {
       event.preventDefault(); // Prevent page reload
       const message = document.getElementById('mainTextbox').value;
       // Assuming your chat div has an id "gptResponse"
-      document.getElementById('gptResponse').innerHTML = `<p>${message}</p>`;
+      // document.getElementById('gptResponse').innerHTML = `<p>${message}</p>`;
+      try {
+        const response = await fetch('/gpt-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          // Append the user's message or the server's response to the gptResponse div
+          document.getElementById('gptResponse').innerHTML += `<p>${data.message}</p>`;
+        } else {
+          document.getElementById('gptResponse').innerHTML += `<p>${data.error || 'Error occurred'}</p>`;
+        }
+
+      } catch (error) {
+        console.error(error);
+        document.getElementById('signupError').textContent = 'An error occurred.';
+      }
     });
 
   </script>
