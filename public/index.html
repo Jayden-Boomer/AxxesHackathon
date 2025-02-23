@@ -1,180 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sign In / Sign Up</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
   <style>
+    /* ------------------------------
+       GENERAL / GLOBAL STYLES
+       ------------------------------ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
+      background-color: #eef3ff; /* Light bluish background */
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      color: #3a3a3a;
     }
-    .container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 300px;
-    }
-    .container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .input-container {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .input-container input[type="text"],
-    .input-container input[type="password"] {
+
+    /* ------------------------------
+       CONTAINER STYLES
+       ------------------------------ */
+    .login-container {
+      background-color: #fff;
+      border-radius: 2rem;       /* Big rounded corners */
       width: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      max-width: 400px;         /* Controls how wide the card gets */
+      padding: 2rem 2.5rem;     /* Space inside the card */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;       /* Center headings and text by default */
     }
-    .toggle-password {
+
+    .login-container h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      color: #2f2f2f;
+    }
+
+    .login-container p.subtitle {
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+
+    /* ------------------------------
+       FORM STYLES
+       ------------------------------ */
+    form {
+      text-align: left;         /* Align form labels and fields to left */
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #444;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #cfcfcf;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      color: #555;
+      background-color: #f9fbff; /* Light bluish input background */
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #92a7ff; /* Subtle focus color */
+      box-shadow: 0 0 0 3px rgba(146,167,255,0.2);
+    }
+
+    /* Eye icon container */
+    .password-wrapper {
+      position: relative;
+    }
+
+    /* Eye icon (just a placeholder—functionality requires JS) */
+    .eye-icon {
       position: absolute;
-      right: 10px;
       top: 50%;
+      right: 1rem;
       transform: translateY(-50%);
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      fill: #999;
+    }
+
+    .eye-icon:hover {
+      fill: #666;
+    }
+
+    /* ------------------------------
+       REMEMBER ME / FORGOT PASSWORD
+       ------------------------------ */
+    .options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
       cursor: pointer;
       user-select: none;
     }
-    .container button {
+
+    .options input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
+
+    .options a {
+      text-decoration: none;
+      color: #4f62c0;
+    }
+
+    .options a:hover {
+      text-decoration: underline;
+    }
+
+    /* ------------------------------
+       BUTTON STYLES
+       ------------------------------ */
+    .btn-submit {
+      display: inline-block;
       width: 100%;
-      padding: 10px;
-      background: #4285F4;
+      background-color: #4f62c0;
       color: #fff;
+      padding: 0.75rem;
       border: none;
-      border-radius: 4px;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      font-size: 16px;
+      transition: background-color 0.2s ease-in-out;
     }
-    .container button:hover {
-      background: #357ae8;
+
+    .btn-submit:hover {
+      background-color: #4659af;
     }
-    .error {
-      color: red;
-      font-size: 14px;
-      margin-top: 10px;
-      text-align: center;
+
+    /* ------------------------------
+       SIGNUP LINK
+       ------------------------------ */
+    .signup-link {
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: #444;
     }
+
+    .signup-link a {
+      color: #4f62c0;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>Sign Up</h2>
-    <form id="signupForm">
-      <div class="input-container">
-        <input type="text" id="signupUsername" placeholder="Username" required />
+  <div class="login-container">
+    <h1>WELCOME!</h1>
+    <p class="subtitle">Please sign in to continue</p>
+
+    <form>
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          placeholder="Email" 
+          required 
+        />
       </div>
-      <div class="input-container">
-        <input type="password" id="signupPassword" placeholder="Password" required />
-        <span class="toggle-password" data-target="signupPassword">👁</span>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="password" 
+            placeholder="Password" 
+            required
+          />
+          <!-- Just a static eye icon. Implement toggle logic with JS if needed. -->
+          <svg 
+            class="eye-icon" 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 3C5.454 3 1.556 6.264.106 10.4c-.043.132-.043.276 0 .408C1.556 14.735 5.454 18 10 18c4.546 0 8.444-3.265 9.894-7.592.043-.132.043-.276 0-.408C18.444 6.264 14.546 3 10 3zm0 13c-3.781 0-7.078-2.424-8.435-5.98C2.92 6.466 6.219 4 10 4c3.781 0 7.079 2.466 8.435 6.02C17.079 13.576 13.781 16 10 16zm0-3a3 3 0 000-6 3 3 0 000 6z" />
+          </svg>
+        </div>
       </div>
-      <button type="submit">Sign Up</button>
-      <div id="signupError" class="error"></div>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="options">
+        <label>
+          <input type="checkbox" />
+          <span>Remember me</span>
+        </label>
+        <a href="#">Forgot Password?</a>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-submit">Sign In</button>
     </form>
-    <hr>
-    <h2>Sign In</h2>
-    <form id="signinForm">
-      <div class="input-container">
-        <input type="text" id="signinUsername" placeholder="Username" required />
-      </div>
-      <div class="input-container">
-        <input type="password" id="signinPassword" placeholder="Password" required />
-        <span class="toggle-password" data-target="signinPassword">👁</span>
-      </div>
-      <button type="submit">Sign In</button>
-      <div id="signinError" class="error"></div>
-    </form>
+
+    <!-- Sign Up Link -->
+    <p class="signup-link">
+      Or <a href="#">Sign up.</a>
+    </p>
   </div>
-
-  <script>
-    // Toggle password visibility for any input associated with a toggle icon
-    document.querySelectorAll('.toggle-password').forEach(function(toggle) {
-      toggle.addEventListener('click', function() {
-        const targetId = toggle.getAttribute('data-target');
-        const inputField = document.getElementById(targetId);
-        if (inputField) {
-          if (inputField.type === 'password') {
-            inputField.type = 'text';
-            toggle.textContent = '🙈';
-          } else {
-            inputField.type = 'password';
-            toggle.textContent = '👁';
-          }
-        }
-      });
-    });
-
-    // Sign Up Form Handler
-    document.getElementById('signupForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const username = document.getElementById('signupUsername').value;
-      const password = document.getElementById('signupPassword').value;
-
-      if (!username || !password) {
-        document.getElementById('signupError').textContent = 'Please fill in both fields.';
-        return;
-      }
-      document.getElementById('signupError').textContent = '';
-
-      try {
-        const response = await fetch('/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-        if (response.ok) {
-          alert(data.message);
-        } else {
-          document.getElementById('signupError').textContent = data.error;
-        }
-      } catch (error) {
-        console.error(error);
-        document.getElementById('signupError').textContent = 'An error occurred.';
-      }
-    });
-
-    // Sign In Form Handler: Set background color if credentials match.
-    document.getElementById('signinForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const username = document.getElementById('signinUsername').value;
-      const password = document.getElementById('signinPassword').value;
-
-      if (!username || !password) {
-        document.getElementById('signinError').textContent = 'Please fill in both fields.';
-        return;
-      }
-      document.getElementById('signinError').textContent = '';
-
-      try {
-        const response = await fetch('/signin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-        if (response.ok) {
-          alert(data.message);
-          // Update the background color using the stored color
-          document.body.style.backgroundColor = data.color;
-        } else {
-          document.getElementById('signinError').textContent = data.error;
-        }
-      } catch (error) {
-        console.error(error);
-        document.getElementById('signinError').textContent = 'An error occurred.';
-      }
-    });
-  </script>
 
 </body>
 </html>
