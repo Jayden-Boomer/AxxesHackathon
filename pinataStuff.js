@@ -41,7 +41,7 @@ async function uploadUserFiles(username) {
     try{
         await uploadUserFile("Symptom Description,date/frequency", username, "Symptoms");
         await uploadUserFile("medication,dosageMG,frequency,reasonPrescribed", username, "Medications");
-        await uploadUserFile("DOB,height,weight,timestamp", username, "General");
+        await uploadUserFile("DOB,height,weight,date", username, "General");
     }
     catch(error) {
         console.log(error);
