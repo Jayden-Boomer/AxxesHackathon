@@ -129,15 +129,18 @@
   </div>
 
   <!-- Main App Container (Displayed after sign in) -->
-  <div class="chat-app" id="chatApp">
-    <h2>Chat</h2>
-    <p>Chat with your personal chatbot:</p>
-    <div id="gptResponse"> </div>
-    <!-- Big text field using a textarea -->
-    <textarea id="mainTextbox" placeholder="Ask a question..."></textarea>
-    <br>
-    <button id="submitMessage">Submit</button>
-  </div>
+
+    <div class="chat-app" id="chatApp">
+      <h2>Chat</h2>
+      <p>Chat with your personal chatbot:</p>
+      <div id="gptResponse"></div>
+      <!-- Big text field using a textarea -->
+      <form id="chatForm">
+        <textarea id="mainTextbox" placeholder="Ask a question..."></textarea>
+        <br>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
 
   <script>
     // Toggle password visibility
@@ -217,11 +220,13 @@
     });
 
     // Main App Submission Handler
-    document.getElementById('submitMessage').addEventListener('click', function() {
+    document.getElementById('chatForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent page reload
       const message = document.getElementById('mainTextbox').value;
-      alert("You submitted: " + message);
-      // Extend this to send the message to your server if needed.
+      // Assuming your chat div has an id "gptResponse"
+      document.getElementById('gptResponse').innerHTML = `<p>${message}</p>`;
     });
+
   </script>
 
 </body>
