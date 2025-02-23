@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sign In / Sign Up</title>
+  <title>Sign In / Main App</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,14 +13,15 @@
       height: 100vh;
       margin: 0;
     }
-    .container {
+    /* Login form container */
+    .login-container {
       background: #fff;
       padding: 20px;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 300px;
     }
-    .container h2 {
+    .login-container h2 {
       text-align: center;
       margin-bottom: 20px;
     }
@@ -44,7 +45,7 @@
       cursor: pointer;
       user-select: none;
     }
-    .container button {
+    .login-container button {
       width: 100%;
       padding: 10px;
       background: #4285F4;
@@ -54,7 +55,7 @@
       cursor: pointer;
       font-size: 16px;
     }
-    .container button:hover {
+    .login-container button:hover {
       background: #357ae8;
     }
     .error {
@@ -63,11 +64,43 @@
       margin-top: 10px;
       text-align: center;
     }
+    /* Main app container (hidden by default) */
+    .chat-app {
+      display: none;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 600px;
+      text-align: center;
+    }
+    /* Big text field style (using textarea) */
+    .chat-app textarea {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    .chat-app button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #4285F4;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <!-- Login/Sign Up Container -->
+  <div class="login-container" id="loginContainer">
     <h2>Sign Up</h2>
     <form id="signupForm">
       <div class="input-container">
@@ -95,8 +128,19 @@
     </form>
   </div>
 
+  <!-- Main App Container (Displayed after sign in) -->
+  <div class="chat-app" id="chatApp">
+    <h2>Chat</h2>
+    <p>Chat with your personal chatbot:</p>
+    <div id="gptResponse"> </div>
+    <!-- Big text field using a textarea -->
+    <textarea id="mainTextbox" placeholder="Ask a question..."></textarea>
+    <br>
+    <button id="submitMessage">Submit</button>
+  </div>
+
   <script>
-    // Toggle password visibility for any input associated with a toggle icon
+    // Toggle password visibility
     document.querySelectorAll('.toggle-password').forEach(function(toggle) {
       toggle.addEventListener('click', function() {
         const targetId = toggle.getAttribute('data-target');
@@ -118,13 +162,11 @@
       event.preventDefault();
       const username = document.getElementById('signupUsername').value;
       const password = document.getElementById('signupPassword').value;
-
       if (!username || !password) {
         document.getElementById('signupError').textContent = 'Please fill in both fields.';
         return;
       }
       document.getElementById('signupError').textContent = '';
-
       try {
         const response = await fetch('/signup', {
           method: 'POST',
@@ -143,18 +185,16 @@
       }
     });
 
-    // Sign In Form Handler: Set background color if credentials match.
+    // Sign In Form Handler: On success, switch to main app view
     document.getElementById('signinForm').addEventListener('submit', async function(event) {
       event.preventDefault();
       const username = document.getElementById('signinUsername').value;
       const password = document.getElementById('signinPassword').value;
-
       if (!username || !password) {
         document.getElementById('signinError').textContent = 'Please fill in both fields.';
         return;
       }
       document.getElementById('signinError').textContent = '';
-
       try {
         const response = await fetch('/signin', {
           method: 'POST',
@@ -164,8 +204,9 @@
         const data = await response.json();
         if (response.ok) {
           alert(data.message);
-          // Update the background color using the stored color
-          document.body.style.backgroundColor = data.color;
+          // Hide login container and show main app container
+          document.getElementById('loginContainer').style.display = 'none';
+          document.getElementById('chatApp').style.display = 'block';
         } else {
           document.getElementById('signinError').textContent = data.error;
         }
@@ -173,6 +214,13 @@
         console.error(error);
         document.getElementById('signinError').textContent = 'An error occurred.';
       }
+    });
+
+    // Main App Submission Handler
+    document.getElementById('submitMessage').addEventListener('click', function() {
+      const message = document.getElementById('mainTextbox').value;
+      alert("You submitted: " + message);
+      // Extend this to send the message to your server if needed.
     });
   </script>
 
